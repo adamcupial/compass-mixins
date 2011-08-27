@@ -1,0 +1,74 @@
+@import "compass/css3";
+@import "compass/utilities/color";
+
+
+@mixin button(
+    $color-1:#FFFFFF,
+    $color-2: false,
+    $glossy: false,
+    $size:'medium',
+    $rounded: false, 
+    $shadow: false, 
+    $diagonal: false){
+
+    @if $color-2 == false{
+        $color-2:darken($color-1, 30%);
+    }
+
+    $color-1a: darken($color-1, 10%);
+    $color-2a: lighten($color-2, 10%);
+    $h: 15px;
+    $fs: 15px;
+
+    border:1px solid darken($color-2, 2%);
+    background:transparent;
+    font-family:Arial;
+    font-weight:700;
+    margin:0;
+    font-size:12px;
+    display:block;
+    text-decoration:none;
+    cursor:pointer;
+
+    @if $size == 'small'{
+        $h: 10px;
+        $fs: 10px;
+    } @else if $size == 'big'{
+        $h: 25px;
+        $fs: 14px;
+    }@else{
+        $h: 15px;
+        $fs: 12px;
+    }
+
+    $p_tb: $h / 3;
+    $p_lr: ($h / 4) * 3;
+    font-size:$fs;
+
+    padding: $p_tb $p_lr;
+
+    @if $rounded {
+        @include border-radius($h/3);
+    }
+
+
+    @if $glossy {
+        @if $diagonal {
+            @include background(linear-gradient(-75deg, $color-1 0%, $color-1a 48%, $color-2a 52%, $color-2 100%));
+        } @else{
+            @include background(linear-gradient(top, $color-1 0%, $color-1a 48%, $color-2a 52%, $color-2 100%));
+        }
+    } @else{
+        @if $diagonal {
+            @include background(linear-gradient(-75deg, $color-1 0%, $color-2 100%));
+        } @else{
+            @include background(linear-gradient(top, $color-1 0%, $color-2 100%));
+        }
+    }
+
+    color: contrast-color(mix($color-1, $color-2, 50%),darken($color-2, 50%), lighten($color-1, 50%), 50%);
+
+    @if $shadow {
+        @include single-box-shadow(lighten($color-2, 15%), $h/10, $h/10, $h/5);
+    }
+}

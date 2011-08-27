@@ -1,0 +1,120 @@
+@import "compass/css3";
+@import "compass/utilities/general/clearfix";
+@import "compass/utilities/color";
+
+@mixin textinput(
+    $height: 20px,
+    $border-color:#dcdcdc,
+    $size:'medium',
+    $rounded: true
+){
+    $height: $height - 4px;
+
+    border:1px solid $border-color;
+    color:darken($border-color, 30%);
+    display:block;
+    margin:0;
+    padding:4px 5px;
+    height:$height;
+    line-height:$height;
+
+    @if $rounded{
+        @include border-radius($height/6);
+    }
+}
+
+@mixin form(
+    $delimiter: 'div',
+    $delimiter-border: false,
+    $inline-labels: false,
+    $label-color:#666,
+    $line-height:20px,
+    $border-color:#dcdcdc){
+
+    $inline-label-width: 27%;
+    $inline-input-width: 100% - $inline-label-width - 1% - 1%;
+
+    $f-size:$line-height * 0.5;
+    @if $f-size < 10px{
+        $f-size: 10px;
+    }
+    @if $f-size > 15px{
+        $f-size: 15px;
+    }
+
+
+    input[type="submit"]{
+        margin-left:$inline-label-width + 1%;
+    }
+
+
+    & > #{$delimiter}{
+        $delimiter-padding:5px;
+        display:block;
+        clear:both;
+        @include clearfix;
+        margin-bottom:5px;
+        padding:$delimiter-padding;
+
+        @if $delimiter_border{
+            border-bottom:1px solid $border-color;
+            padding-bottom:$delimiter-padding + 5px;
+
+            &:last-of-type{
+                border-bottom:none;
+                padding-bottom:$delimiter-padding;
+            }
+        } //delimiter-border
+
+
+        & > .error{
+            display:block;
+            clear:both;
+            font-size:$f-size;
+            @if $inline-labels{
+                margin-left:$inline-label-width + 1%;
+                width: $inline-input-width;
+                margin-bottom:3px;
+                color:red;
+                font-style:italic;
+            }
+        }
+        
+        & > label{
+            font-size:$f-size;
+            display:block;
+            color:$label-color;
+            height: $line-height;
+            line-height:$line-height;
+
+            @if $inline-labels{
+                float:left;
+                width:$inline-label-width;
+                text-align:right;
+                margin-right:1%;
+            } @else {
+                clear:both;
+            }
+
+        &.required{
+            &:after{
+                content:" *";
+                color:red;
+            }
+        }
+
+        } //label
+
+        @each $type in text, password, email, phone{
+            & > input[type="#{$type}"]{
+
+                @include textinput($border-color:$border-color, $height:$line-height);
+
+                @if $inline-labels{
+                    float:left;
+                    width: $inline-input-width * 0.66;
+                }
+            }
+        }
+    }//delimiter
+} // form
